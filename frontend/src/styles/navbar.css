@@ -1,25 +1,47 @@
-.navbar {
+#navbar {
   position: absolute;
   display: flex;
-  max-width: 100%;
-  max-height: 100%;
-  background: red;
+  width: 100%;
+  height: 67px;
 }
 
-.navbar > .logo {
-  position: absolute;
+#navbar > .display-sidebar {
+  margin-top: 32px;
+  margin-left: 20px;
+}
+
+#navbar > .logo {
+  width: 193.49px;
+  height: 40px;
+  margin-top: 20px;
+  margin-left: 20px;
   display: flex;
+  align-items: center;
 }
 
-.navbar > .logo > img {
-  transform: scale(0.5);
-}
-
-.navbar > .logo > .web-name {
+#navbar > .logo > p {
   color: #eee9ff;
-  font-family: Poppins;
-  font-size: 40px;
+  font-family: Bold;
+  font-size: 28px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  margin-left: 9.68px;
+}
+
+#navbar > #history {
+  margin-left: 1301.51px;
+}
+
+#navbar > #history,
+#infor,
+#settings,
+#menu {
+  margin-top: 27px;
+}
+
+#navbar > #history,
+#infor,
+#settings {
+  margin-right: 26px;
 }
