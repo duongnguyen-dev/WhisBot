@@ -86,23 +86,46 @@
 
 .chat > .window > .prompt > .prompt-container {
   display: flex;
-  border-radius: 30px;
   border: 0.5px solid #eee9ff;
+  border-radius: 30px;
   background: #000;
   width: 900px;
   height: 60px;
   margin-left: 36px;
+  align-items: center;
 }
 
-.chat > .window > .prompt > .prompt-container > input {
-  margin-top: 18px;
-  height: 24px;
+.chat > .window > .prompt > .prompt-container > textarea {
   position: absolute;
+  resize: none;
+  border: none;
+  background: #000;
+  color: #eee9ff;
+  font-family: Regular;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-left: 36.43px;
+}
+
+.chat > .window > .prompt > .prompt-container > textarea::placeholder {
+  color: #eee9ff;
+}
+
+.chat > .window > .prompt > .prompt-container > textarea:focus {
+  outline: none !important;
+  color: #eee9ff;
+  font-family: Regular;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
 }
 
 .chat > .window > .prompt > .prompt-container > svg {
   position: absolute;
-  margin-top: 21px;
+  margin-left: 849.43px;
 }
 
 .chat > .window > .prompt > #send-prompt {
