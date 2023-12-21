@@ -1,17 +1,40 @@
 import "../styles/navbar.css";
 import "../lib/fonts.css";
-// import logo from "../assets/whisbot-logo.png";
+import { useDispatch } from "react-redux";
+import { useState } from "react";
+import { changeState } from "../states/sidebar_states";
 
 export default function Navbar() {
+  const dispatch = useDispatch();
+  const [clicked, changeClicked] = useState(false);
+
+  const onClickShowSidebar = () => {
+    if (clicked === false) {
+      changeClicked(true);
+      dispatch(changeState(true));
+      document.getElementById("display-sidebar").style.background = "#a27cf2";
+    } else {
+      changeClicked(false);
+      document.getElementById("display-sidebar").style.background = "none";
+      dispatch(changeState(false));
+    }
+    console.log(clicked);
+  };
+
   return (
     <div className="navbar" id="navbar">
-      <div className="display-sidebar">
+      <div
+        className="display-sidebar"
+        id="display-sidebar"
+        onClick={onClickShowSidebar}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           width="22"
           height="18"
           viewBox="0 0 22 18"
           fill="none"
+          id="display-sidebar-icon"
         >
           <path
             d="M1 16.41H21"
@@ -197,6 +220,29 @@ export default function Navbar() {
         <circle cx="2.22222" cy="17.7778" r="2.22222" fill="white" />
         <circle cx="9.99999" cy="17.7778" r="2.22222" fill="white" />
         <circle cx="17.7778" cy="17.7778" r="2.22222" fill="white" />
+      </svg>
+
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="40"
+        height="40"
+        viewBox="0 0 40 40"
+        fill="none"
+        id="user-login"
+      >
+        <g clip-path="url(#clip0_138_757)">
+          <path
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M40 20C40 25.3625 37.8894 30.232 34.454 33.8234C30.8254 37.6163 25.7191 39.9834 20.0597 40C20.0398 40 20.0199 40 20 40C19.9801 40 19.9602 40 19.9403 40C14.2809 39.9834 9.17446 37.6163 5.54609 33.8234C2.11045 30.232 0 25.3625 0 20C0 8.95432 8.95432 0 20 0C31.0457 0 40 8.95432 40 20ZM32.1223 30C29.2403 26.5099 24.8798 24.2856 20 24.2856C15.1202 24.2856 10.7598 26.5099 7.87757 30C10.7598 33.49 15.1202 35.7143 20 35.7143C24.8798 35.7143 29.2403 33.49 32.1223 30ZM20.0003 21.4285C23.9452 21.4285 27.1432 18.2305 27.1432 14.2856C27.1432 10.3407 23.9452 7.14277 20.0003 7.14277C16.0555 7.14277 12.8575 10.3407 12.8575 14.2856C12.8575 18.2305 16.0555 21.4285 20.0003 21.4285Z"
+            fill="#D9D9D9"
+          />
+        </g>
+        <defs>
+          <clipPath id="clip0_138_757">
+            <rect width="40" height="40" fill="white" />
+          </clipPath>
+        </defs>
       </svg>
     </div>
   );

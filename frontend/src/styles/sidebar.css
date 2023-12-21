@@ -1,0 +1,25 @@
+.sidebar {
+  position: absolute;
+  width: 325px;
+  height: 916px;
+  margin-top: 70px;
+}
+
+.sidebar > #create-new-chat {
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  width: 85px;
+  height: 21px;
+  margin-left: 40px;
+}
+
+.sidebar > #create-new-chat > p {
+  color: #7b7e81;
+  font-family: Medium;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-left: 8px;
+}

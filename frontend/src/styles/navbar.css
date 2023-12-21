@@ -6,15 +6,32 @@
 }
 
 #navbar > .display-sidebar {
-  margin-top: 32px;
-  margin-left: 20px;
+  position: absolute;
+  margin-top: 22px;
+  margin-left: 31px;
+  width: 38px;
+  height: 35.41px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+#navbar > .display-sidebar > svg {
+  width: 20px;
+  height: 15.41px;
+  position: absolute;
+  margin-top: 10px;
+  margin-left: 9px;
+}
+
+.navbar > .display-sidebar:hover {
+  background: #a27cf2;
 }
 
 #navbar > .logo {
   width: 193.49px;
   height: 40px;
   margin-top: 20px;
-  margin-left: 20px;
+  margin-left: 120px;
   display: flex;
   align-items: center;
 }
@@ -30,18 +47,17 @@
 }
 
 #navbar > #history {
-  margin-left: 1301.51px;
+  margin-left: 1224.19px;
+}
+
+#navbar > #user-login {
+  margin-top: 20px;
 }
 
 #navbar > #history,
 #infor,
 #settings,
 #menu {
-  margin-top: 27px;
-}
-
-#navbar > #history,
-#infor,
-#settings {
+  margin-top: 29px;
   margin-right: 26px;
 }

@@ -1,10 +1,28 @@
 import "../lib/fonts.css";
 import "../styles/chat.css";
+import { useSelector } from "react-redux";
+import { useState } from "react";
 
 export default function Chat() {
+  const showSidebar = useSelector((state) => state.showSidebar.value);
+  const [featureButtonClicked, setFeatureButtonClick] = useState(false);
+  // const featurename = useSelector((state) => state.featurename.value);
+
+  const onClickFeatureButton = () => {
+    setFeatureButtonClick(true);
+    document.getElementById("selecting-features").style.background = "#eee9ff";
+  };
+
   return (
-    <div className="chat">
-      <div className="window" id="window">
+    <div className="chat" id="chat">
+      <div
+        className="window"
+        id="window"
+        style={{
+          width: showSidebar === true ? "1435px" : "1680px",
+          marginLeft: showSidebar === true ? "265px" : "20px",
+        }}
+      >
         <div className="content">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -33,16 +51,51 @@ export default function Chat() {
               fill="#A27CF2"
             />
           </svg>
-          <div className="webname-container">
-            <p id="website-name">WhisBot</p>
-          </div>
-          <div className="description-container">
-            <p id="description">
-              <span id="span1">WhisBot</span> is a cutting-edge{" "}
-              <span id="span2">“voice chatbot”</span> that uses artificial
-              intelligence (AI) to provide users with a natural and engaging{" "}
-              <br />
-              conversational experience.{" "}
+          <p id="new">What can I help you today?</p>
+          <div className="warning">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+            >
+              <g clip-path="url(#clip0_134_4)">
+                <path
+                  d="M11.2715 1.49986C11.1516 1.26585 10.9694 1.06947 10.7451 0.932346C10.5208 0.795216 10.263 0.722656 10 0.722656C9.73712 0.722656 9.47929 0.795216 9.25496 0.932346C9.03063 1.06947 8.84849 1.26585 8.72862 1.49986L0.871467 17.2141C0.761882 17.4316 0.709707 17.6734 0.719899 17.9169C0.73009 18.1601 0.80231 18.3967 0.9297 18.6043C1.05709 18.8119 1.23542 18.9834 1.44776 19.1026C1.66009 19.2219 1.89937 19.2849 2.1429 19.2856H17.8571C18.1007 19.2849 18.34 19.2219 18.5523 19.1026C18.7647 18.9834 18.943 18.8119 19.0704 18.6043C19.1977 18.3967 19.27 18.1601 19.2801 17.9169C19.2904 17.6734 19.2381 17.4316 19.1286 17.2141L11.2715 1.49986Z"
+                  stroke="white"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M10 7.14288V11.7857"
+                  stroke="white"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M10 15.7143C9.80276 15.7143 9.64286 15.5544 9.64286 15.3571C9.64286 15.1599 9.80276 15 10 15"
+                  stroke="white"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M10 15.7143C10.1972 15.7143 10.3571 15.5544 10.3571 15.3571C10.3571 15.1599 10.1972 15 10 15"
+                  stroke="white"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_134_4">
+                  <rect width="20" height="20" rx="10" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+            <p>
+              Your conversations are processed by human reviewers to improve the
+              technologies powering <br /> WhisBot. Don’t enter anything you
+              wouldn’t want reviewed or used.
             </p>
           </div>
         </div>
@@ -78,6 +131,29 @@ export default function Chat() {
             />
           </svg>
           <div className="prompt-container">
+            <div id="selecting-features" onClick={onClickFeatureButton}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 20 20"
+                fill="none"
+              >
+                <g clip-path="url(#clip0_138_149)">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M14.1695 1.0444C14.4247 -0.12187 16.0854 -0.129129 16.3509 1.03486L16.3629 1.08795C16.3709 1.12381 16.3786 1.15682 16.3866 1.19127C16.6759 2.42342 17.6731 3.3649 18.9213 3.58206C20.1384 3.79382 20.1384 5.54113 18.9213 5.75289C17.6664 5.9712 16.6653 6.92159 16.382 8.16343L16.3509 8.30009C16.0854 9.46409 14.4247 9.45682 14.1695 8.29056L14.1438 8.1733C13.871 6.927 12.8713 5.96963 11.6143 5.75096C10.3993 5.53957 10.3993 3.79537 11.6143 3.584C12.8669 3.36609 13.864 2.4146 14.1409 1.17468L14.1598 1.08871L14.1695 1.0444ZM1.5781 0.2433C0.807092 0.2433 0.18206 0.868331 0.18206 1.63934V7.57253C0.18206 8.34354 0.807092 8.96857 1.5781 8.96857H7.5113C8.28232 8.96857 8.90734 8.34354 8.90734 7.57253V1.63934C8.90734 0.868331 8.28232 0.2433 7.5113 0.2433H1.5781ZM0.18206 12.4887C0.18206 11.7177 0.807092 11.0926 1.5781 11.0926H7.5113C8.28232 11.0926 8.90734 11.7177 8.90734 12.4887V18.4219C8.90734 19.1929 8.28232 19.8179 7.5113 19.8179H1.5781C0.807092 19.8179 0.18206 19.1929 0.18206 18.4219V12.4887ZM11.0314 12.4887C11.0314 11.7177 11.6564 11.0926 12.4274 11.0926H18.3606C19.1317 11.0926 19.7567 11.7177 19.7567 12.4887V18.4219C19.7567 19.1929 19.1317 19.8179 18.3606 19.8179H12.4274C11.6564 19.8179 11.0314 19.1929 11.0314 18.4219V12.4887Z"
+                    fill="black"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_138_149">
+                    <rect width="20" height="20" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+            </div>
             <textarea
               placeholder="Enter a prompt here"
               rows="1"
@@ -136,6 +212,23 @@ export default function Chat() {
               stroke-linejoin="round"
             />
           </svg>
+        </div>
+        <div
+          className="features-box"
+          hidden={featureButtonClicked === true ? false : true}
+        >
+          <div id="communicate-with-bot">
+            <div className="p-container-1">Communicate</div>
+          </div>
+          <div id="voice-qa">
+            <div className="p-container-2">Voice Q&A</div>
+          </div>
+          <div id="audio-noise-removal">
+            <div className="p-container-3">Audio Noise Removal</div>
+          </div>
+          <div id="text-to-music">
+            <div className="p-container-4">Text to music</div>
+          </div>
         </div>
       </div>
     </div>
