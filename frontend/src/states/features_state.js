@@ -1,9 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 export const featuresSlice = createSlice({
-  name: "featurename",
+  name: "featureName",
   initialState: {
-    value: "communicate",
+    value: null,
   },
   reducers: {
     changeFeatures: (state, action) => {

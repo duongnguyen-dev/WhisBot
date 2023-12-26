@@ -3,6 +3,7 @@ import "./styles/App.css";
 // import api from "./api";
 import Navbar from "./components/navbar";
 import Chat from "./components/chat";
+import Sidebar from "./components/sidebar";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <header className="App-header">
         {/* <AudioRecorder /> */}
         <Navbar></Navbar>
+        <Sidebar></Sidebar>
         <Chat></Chat>
       </header>
     </div>

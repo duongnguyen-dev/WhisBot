@@ -17,8 +17,110 @@
   justify-content: center;
 }
 
-.chat > .window > .content {
+.chat > .window > .chat-screen {
+  flex-direction: column;
+  width: 679px;
+  height: 685px;
+  overflow-y: scroll;
+  position: relative;
+}
+.chat > .window > .chat-screen > .user-bubble {
+  width: 679px;
+  height: fit-content;
+  margin-top: 40px;
+  position: relative;
+}
+
+.chat > .window > .chat-screen > .bot-bubble {
+  margin-top: 40px;
+  width: 679px;
+  height: fit-content;
+  position: relative;
+}
+
+.chat > .window > .chat-screen > .user-bubble > .user-content {
   display: flex;
+}
+
+.chat > .window > .chat-screen > .user-bubble > .user-content > .dummy {
+  margin-top: 11px;
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  max-width: 629px;
+}
+
+.chat > .window > .chat-screen > .bot-bubble > .bot-content > .bot-dummy {
+  margin-top: 11px;
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  max-width: 629px;
+}
+
+.chat
+  > .window
+  > .chat-screen
+  > .user-bubble
+  > .user-content
+  > .dummy
+  > .dummy1 {
+  margin-bottom: 10px;
+  color: #fff;
+  font-family: Bold;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.chat
+  > .window
+  > .chat-screen
+  > .bot-bubble
+  > .bot-content
+  > .bot-dummy
+  > .bot-dummy1 {
+  margin-bottom: 10px;
+  color: #fff;
+  font-family: Bold;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.chat
+  > .window
+  > .chat-screen
+  > .user-bubble
+  > .user-content
+  > .dummy
+  > .dummy2 {
+  color: #fff;
+  font-family: Regular;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.chat
+  > .window
+  > .chat-screen
+  > .bot-bubble
+  > .bot-content
+  > .bot-dummy
+  > .bot-dummy2 {
+  color: #fff;
+  font-family: Regular;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.chat > .window > .content {
   flex-direction: column;
   margin-top: 50px;
   align-items: center;
@@ -56,6 +158,7 @@
   font-weight: 400;
   line-height: normal;
 }
+
 .chat > .window > .prompt {
   display: flex;
   position: absolute;
@@ -78,16 +181,28 @@
 }
 
 .chat > .window > .prompt > .prompt-container > #selecting-features {
+  display: flex;
   width: 42px;
   height: 42px;
   border-radius: 25px;
   margin-left: 14px;
   background: rgba(238, 233, 255, 0.5);
+  align-items: center;
+}
+
+.chat > .window > .prompt > .prompt-container > #selecting-features > div {
+  color: #eee9ff;
+  font-family: Medium;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  margin-left: 55px;
 }
 
 .chat > .window > .prompt > .prompt-container > #selecting-features > svg {
-  margin-top: 11px;
   margin-left: 11px;
+  position: absolute;
 }
 
 .chat > .window > .prompt > .prompt-container > #selecting-features:hover {
@@ -104,8 +219,8 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
-  margin-left: 12px;
-  width: 580px;
+  margin-left: 70px;
+  width: 500px;
 }
 
 .chat > .window > .prompt > .prompt-container > textarea::placeholder {
@@ -128,7 +243,12 @@
 }
 
 .chat > .window > .prompt > #send-prompt {
-  margin-left: 36px;
+  margin-left: 28px;
+  cursor: pointer;
+}
+
+.chat > .window > .prompt > #send-prompt:hover {
+  fill: #eee9ff;
 }
 
 .chat > .window > .features-box {
@@ -144,18 +264,42 @@
   margin-right: 460px;
 }
 
-.chat > .window > .features-box > #communicate-with-bot {
+.chat > .window > .features-box > .communicate-with-bot {
   position: relative;
   width: 155px;
   height: 38px;
   border-radius: 5px;
-  background: #eee9ff;
   margin-top: 10px;
   margin-left: 20px;
+  cursor: pointer;
 }
 
-.chat > .window > .features-box > #communicate-with-bot > .p-container-1 {
-  color: #7338f2;
+.chat > .window > .features-box > .communicate-with-bot > #p-container-1 {
+  color: #fff;
+  font-family: SemiBold;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.chat > .window > .features-box > .voice-qa {
+  position: relative;
+  width: 155px;
+  height: 38px;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-left: 20px;
+  cursor: pointer;
+}
+
+.chat > .window > .features-box > .voice-qa > #p-container-2 {
+  color: #fff;
   font-family: SemiBold;
   font-size: 12px;
   font-style: normal;
@@ -167,18 +311,18 @@
   margin-left: 20px;
 }
 
-.chat > .window > .features-box > #voice-qa {
+.chat > .window > .features-box > .audio-noise-removal {
   position: relative;
   width: 155px;
   height: 38px;
   border-radius: 5px;
-  background: #eee9ff;
   margin-top: 10px;
   margin-left: 20px;
+  cursor: pointer;
 }
 
-.chat > .window > .features-box > #voice-qa > .p-container-2 {
-  color: #7338f2;
+.chat > .window > .features-box > .audio-noise-removal > #p-container-3 {
+  color: #fff;
   font-family: SemiBold;
   font-size: 12px;
   font-style: normal;
@@ -188,20 +332,21 @@
   top: 50%;
   transform: translate(0, -50%);
   margin-left: 20px;
+  cursor: pointer;
 }
 
-.chat > .window > .features-box > #audio-noise-removal {
+.chat > .window > .features-box > .text-to-music {
   position: relative;
   width: 155px;
   height: 38px;
   border-radius: 5px;
-  background: #eee9ff;
   margin-top: 10px;
   margin-left: 20px;
+  cursor: pointer;
 }
 
-.chat > .window > .features-box > #audio-noise-removal > .p-container-3 {
-  color: #7338f2;
+.chat > .window > .features-box > .text-to-music > #p-container-4 {
+  color: #fff;
   font-family: SemiBold;
   font-size: 12px;
   font-style: normal;
@@ -211,27 +356,133 @@
   top: 50%;
   transform: translate(0, -50%);
   margin-left: 20px;
+  cursor: pointer;
 }
 
-.chat > .window > .features-box > #text-to-music {
-  position: relative;
-  width: 155px;
-  height: 38px;
+.chat > .window > .chat-screen > .bot-bubble > .bot-audio-content > .bot-dummy {
+  margin-top: 11px;
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+  max-width: 629px;
+}
+
+.chat
+  > .window
+  > .chat-screen
+  > .bot-bubble
+  > .bot-audio-content
+  > .bot-dummy
+  > .bot-dummy1 {
+  margin-bottom: 10px;
+  color: #fff;
+  font-family: Bold;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.chat
+  > .window
+  > .chat-screen
+  > .bot-bubble
+  > .bot-audio-content
+  > .bot-dummy
+  > .bot-dummy2 {
+  display: flex;
+  height: 100px;
+  width: 641px;
+  background: black;
+  align-items: center;
   border-radius: 5px;
-  background: #eee9ff;
-  margin-top: 10px;
-  margin-left: 20px;
 }
 
-.chat > .window > .features-box > #text-to-music > .p-container-4 {
-  color: #7338f2;
+.chat
+  > .window
+  > .chat-screen
+  > .bot-bubble
+  > .bot-audio-content
+  > .bot-dummy
+  > .bot-dummy2
+  > .result {
+  position: absolute;
+  border-radius: 1px;
+  background: #eee9ff;
+  width: 65px;
+  height: 44px;
+  color: #1b1f27;
   font-family: SemiBold;
   font-size: 12px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
-  position: absolute;
-  top: 50%;
-  transform: translate(0, -50%);
   margin-left: 20px;
+}
+
+.chat
+  > .window
+  > .chat-screen
+  > .bot-bubble
+  > .bot-audio-content
+  > .bot-dummy
+  > .bot-dummy2
+  > .result
+  > p {
+  margin-top: 13px;
+  margin-left: 12px;
+}
+
+.chat
+  > .window
+  > .chat-screen
+  > .bot-bubble
+  > .bot-audio-content
+  > .bot-dummy
+  > .bot-dummy2
+  > .play-button {
+  display: flex;
+  margin-left: 100px;
+  align-items: center;
+  position: absolute;
+}
+
+.chat
+  > .window
+  > .chat-screen
+  > .bot-bubble
+  > .bot-audio-content
+  > .bot-dummy
+  > .bot-dummy2
+  > .play-button
+  > #play-button-element-1 {
+  position: absolute;
+}
+
+.chat
+  > .window
+  > .chat-screen
+  > .bot-bubble
+  > .bot-audio-content
+  > .bot-dummy
+  > .bot-dummy2
+  > .play-button
+  > #play-button-element-2 {
+  margin-left: 8px;
+}
+
+.chat
+  > .window
+  > .chat-screen
+  > .bot-bubble
+  > .bot-audio-content
+  > .bot-dummy
+  > .bot-dummy2
+  > #demo-audio {
+  border-radius: 1px;
+  background: #1b1f27;
+  width: 474px;
+  height: 44px;
+  margin-left: 145px;
+  max-width: 474px;
 }

@@ -1,16 +1,130 @@
 import "../lib/fonts.css";
 import "../styles/chat.css";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState } from "react";
+import { changeFeatures } from "../states/features_state";
+// import WaveSurfer from "wavesurfer.js";
+import api from "../api";
 
 export default function Chat() {
   const showSidebar = useSelector((state) => state.showSidebar.value);
+  const featurename = useSelector((state) => state.featureName.value);
   const [featureButtonClicked, setFeatureButtonClick] = useState(false);
-  // const featurename = useSelector((state) => state.featurename.value);
+  const dispatch = useDispatch();
+  const [send, setSend] = useState(false);
+  const [bubble, setBubble] = useState("0");
 
   const onClickFeatureButton = () => {
-    setFeatureButtonClick(true);
-    document.getElementById("selecting-features").style.background = "#eee9ff";
+    if (featureButtonClicked === true && featurename === null) {
+      setFeatureButtonClick(false);
+      document.getElementById("selecting-features").style.background =
+        "rgba(238, 233, 255, 0.5)";
+      document.getElementById("selecting-features").hidden = "true";
+    } else if (featureButtonClicked === true && featurename !== null) {
+      setFeatureButtonClick(false);
+      document.getElementById("selecting-features").hidden = "true";
+    } else {
+      setFeatureButtonClick(true);
+      document.getElementById("selecting-features").style.background =
+        "#eee9ff";
+      document.getElementById("selecting-features").hidden = "false";
+    }
+  };
+
+  const sendPrompt = async () => {
+    if (send === false) {
+      setSend(true);
+    }
+
+    if (bubble === "0") {
+      var dummy = document.getElementById("dummy2-0");
+      var bot_dummy = document.getElementById("bot-dummy2-0");
+    } else {
+      var dummy = document.getElementById(
+        "dummy2-" + String(parseInt(bubble) - 1)
+      );
+      var bot_dummy = document.getElementById(
+        "bot-dummy2-" + String(parseInt(bubble) - 1)
+      );
+    }
+
+    const chat_screen = document.getElementById("chat-screen");
+    var user_original = document.getElementById("user-bubble");
+    var bot_original = document.getElementById("bot-bubble");
+
+    var data = null;
+    const textarea = document.querySelector("textarea");
+    if (featurename === "text_to_music") {
+      data = { prompt: `♪ ${textarea.value} ♪` };
+    } else if (featurename === "communicate") {
+      data = { prompt: textarea.value };
+      console.log(data);
+    }
+    textarea.value = "";
+
+    dummy.id = "dummy2-" + bubble;
+    dummy.innerHTML = data.prompt;
+    var user_clone = user_original.cloneNode(true);
+    user_clone.id = "user-bubble" + "-" + bubble;
+    user_clone.style.display = "flex";
+    chat_screen.appendChild(user_clone);
+
+    const chat_window = document.getElementById("chat-screen");
+    chat_window.scrollTop = chat_window.scrollHeight;
+
+    // var response = "undefine";
+    // if (featurename === "text_to_music") {
+    //   response = await api.post("/text_to_music", data);
+    // } else if (featurename === "communicate") {
+    const response = await api.post("/normal_chat", data);
+
+    bot_dummy.id = "bot-dummy2-" + bubble;
+    bot_dummy.innerHTML = response.data.answer;
+    var bot_clone = bot_original.cloneNode(true);
+    bot_clone.id = "bot-bubble" + "-" + bubble;
+    bot_clone.style.display = "flex";
+    chat_screen.appendChild(bot_clone);
+    chat_window.scrollTop = chat_window.scrollHeight;
+
+    setBubble(String(parseInt(bubble) + 1));
+  };
+
+  const onClickChangeFeature = (e) => {
+    if (featurename === "communicate") {
+      document.getElementById("p1-container").style.background = "none";
+      document.getElementById("p-container-1").style.color = "#FFF";
+    } else if (featurename === "voice_q&a") {
+      document.getElementById("p2-container").style.background = "none";
+      document.getElementById("p-container-2").style.color = "#FFF";
+    } else if (featurename === "noise_removal") {
+      document.getElementById("p3-container").style.background = "none";
+      document.getElementById("p-container-3").style.color = "#FFF";
+    } else if (featurename === "text_to_music") {
+      document.getElementById("p4-container").style.background = "none";
+      document.getElementById("p-container-4").style.color = "#FFF";
+    }
+
+    if (e.target.className === "communicate-with-bot") {
+      dispatch(changeFeatures("communicate"));
+      document.getElementById("p1-container").style.background = "#EEE9FF";
+      document.getElementById("p-container-1").style.color = "#7338F2";
+      setFeatureButtonClick(false);
+    } else if (e.target.className === "voice-qa") {
+      dispatch(changeFeatures("voice_q&a"));
+      document.getElementById("p2-container").style.background = "#EEE9FF";
+      document.getElementById("p-container-2").style.color = "#7338F2";
+      setFeatureButtonClick(false);
+    } else if (e.target.className === "audio-noise-removal") {
+      dispatch(changeFeatures("noise_removal"));
+      document.getElementById("p3-container").style.background = "#EEE9FF";
+      document.getElementById("p-container-3").style.color = "#7338F2";
+      setFeatureButtonClick(false);
+    } else {
+      dispatch(changeFeatures("text_to_music"));
+      document.getElementById("p4-container").style.background = "#EEE9FF";
+      document.getElementById("p-container-4").style.color = "#7338F2";
+      setFeatureButtonClick(false);
+    }
   };
 
   return (
@@ -23,7 +137,181 @@ export default function Chat() {
           marginLeft: showSidebar === true ? "265px" : "20px",
         }}
       >
-        <div className="content">
+        <div
+          className="chat-screen"
+          id="chat-screen"
+          style={{ display: send === true ? "flex" : "none" }}
+        >
+          <div
+            className="user-bubble"
+            id="user-bubble"
+            style={{
+              display: "none",
+            }}
+          >
+            <div className="user-content">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="40"
+                height="40"
+                viewBox="0 0 40 40"
+                fill="none"
+              >
+                <g clip-path="url(#clip0_138_331)">
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M40 20C40 25.3625 37.8894 30.232 34.454 33.8234C30.8254 37.6163 25.7191 39.9834 20.0597 40C20.0398 40 20.0199 40 20 40C19.9801 40 19.9602 40 19.9403 40C14.2809 39.9834 9.17446 37.6163 5.54609 33.8234C2.11045 30.232 0 25.3625 0 20C0 8.95432 8.95432 0 20 0C31.0457 0 40 8.95432 40 20ZM32.1223 30C29.2403 26.5099 24.8798 24.2856 20 24.2856C15.1202 24.2856 10.7598 26.5099 7.87757 30C10.7598 33.49 15.1202 35.7143 20 35.7143C24.8798 35.7143 29.2403 33.49 32.1223 30ZM20.0003 21.4285C23.9452 21.4285 27.1432 18.2305 27.1432 14.2856C27.1432 10.3407 23.9452 7.14277 20.0003 7.14277C16.0555 7.14277 12.8575 10.3407 12.8575 14.2856C12.8575 18.2305 16.0555 21.4285 20.0003 21.4285Z"
+                    fill="#D9D9D9"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_138_331">
+                    <rect width="40" height="40" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
+              <div className="dummy">
+                <div className="dummy1">You</div>
+                <div className="dummy2" id="dummy2-0"></div>
+              </div>
+            </div>
+          </div>
+          <div
+            className="bot-bubble"
+            id="bot-bubble"
+            style={{
+              display: "none",
+            }}
+          >
+            {/* <div
+              className="bot-audio-content"
+              style={{
+                display: featurename === "text_to_music" ? "flex" : "none",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="40"
+                height="40"
+                viewBox="0 0 40 40"
+                fill="none"
+              >
+                <circle cx="20" cy="20" r="20" fill="#A27CF2" />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M16.9233 13.0751C16.8131 12.9908 16.6646 12.9762 16.5402 13.0377C16.4157 13.0991 16.337 13.2258 16.337 13.3645V20.6242C16.337 20.7371 16.3893 20.8436 16.4787 20.9126L25.9587 28.2333C26.0688 28.3183 26.2176 28.3333 26.3424 28.272C26.4672 28.2108 26.5462 28.0839 26.5462 27.9449V20.6242C26.5462 20.5108 26.4934 20.4038 26.4034 20.3348L16.9233 13.0751Z"
+                  fill="white"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M6.58634 13.0751C6.47618 12.9908 6.32765 12.9762 6.20322 13.0377C6.07878 13.0991 6 13.2258 6 13.3645V20.6242C6 20.7371 6.05234 20.8436 6.14172 20.9126L15.6218 28.2333C15.7318 28.3183 15.8806 28.3333 16.0054 28.272C16.1302 28.2108 16.2093 28.0839 16.2093 27.9449V20.6242C16.2093 20.5108 16.1565 20.4038 16.0664 20.3348L6.58634 13.0751Z"
+                  fill="white"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M26.5468 13.1978C26.5468 13.0885 26.6316 13 26.7362 13H33.8105C33.8884 13 33.9584 13.0498 33.9869 13.1255C34.0154 13.2012 33.9965 13.2874 33.9394 13.3427L26.8652 20.199C26.81 20.2525 26.7296 20.2668 26.6605 20.2353C26.5914 20.2039 26.5468 20.1327 26.5468 20.054V13.1978ZM26.9257 13.3956V13.5933V19.6005L33.328 13.3956H27.1152H26.9257Z"
+                  fill="white"
+                />
+              </svg>
+              <div className="bot-dummy">
+                <div className="bot-dummy1">WhisBot</div>
+                <div className="bot-dummy2" id="bot-dummy2-0">
+                  <div className="result">
+                    <p>Result</p>
+                  </div>
+                  <div className="play-button" id="play-button">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="30"
+                      height="30"
+                      viewBox="0 0 30 30"
+                      fill="none"
+                      id="play-button-element-1"
+                    >
+                      <circle
+                        cx="15"
+                        cy="15"
+                        r="14.5"
+                        stroke="#EEE9FF"
+                        stroke-opacity="0.4"
+                      />
+                    </svg>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="14"
+                      height="14"
+                      viewBox="0 0 14 14"
+                      fill="none"
+                      id="play-button-element-2"
+                    >
+                      <g clip-path="url(#clip0_141_1231)">
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="M2.67593 0.019043C2.38017 0.019043 2.08936 0.0944305 1.83094 0.237991C1.5678 0.37213 1.34569 0.574887 1.18817 0.824921C1.02838 1.07855 0.941166 1.37113 0.936001 1.67085L0.935926 1.67946V12.3395L0.936001 12.3481C0.941166 12.6478 1.02838 12.9404 1.18817 13.194C1.34569 13.4441 1.5678 13.6468 1.83094 13.781C2.08936 13.9245 2.38017 13.9999 2.67593 13.9999C2.97588 13.9999 3.27074 13.9224 3.53189 13.7748C3.53764 13.7716 3.54332 13.7682 3.54893 13.7647L12.1787 8.42723C12.4404 8.29534 12.6613 8.09441 12.8175 7.84593C12.9786 7.58934 13.0642 7.29248 13.0642 6.98946C13.0642 6.68645 12.9786 6.38958 12.8175 6.133C12.6612 5.88426 12.4399 5.68316 12.1779 5.55128L3.54751 0.253343C3.54236 0.250183 3.53715 0.247116 3.53189 0.244144C3.27074 0.0965852 2.97588 0.019043 2.67593 0.019043Z"
+                          fill="#EEE9FF"
+                          fill-opacity="0.4"
+                        />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_141_1231">
+                          <rect width="14" height="14" fill="white" />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </div>
+                  <div id="demo-audio"></div>
+                </div>
+              </div>
+            </div> */}
+            <div
+              className="bot-content"
+              style={{
+                display: "flex",
+              }}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="40"
+                height="40"
+                viewBox="0 0 40 40"
+                fill="none"
+              >
+                <circle cx="20" cy="20" r="20" fill="#7338F2" />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M16.9233 13.0751C16.8131 12.9908 16.6646 12.9762 16.5402 13.0377C16.4157 13.0991 16.337 13.2258 16.337 13.3645V20.6242C16.337 20.7371 16.3893 20.8436 16.4787 20.9126L25.9587 28.2333C26.0688 28.3183 26.2176 28.3333 26.3424 28.272C26.4672 28.2108 26.5462 28.0839 26.5462 27.9449V20.6242C26.5462 20.5108 26.4934 20.4038 26.4034 20.3348L16.9233 13.0751Z"
+                  fill="white"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M6.58634 13.0751C6.47618 12.9908 6.32765 12.9762 6.20322 13.0377C6.07878 13.0991 6 13.2258 6 13.3645V20.6242C6 20.7371 6.05234 20.8436 6.14172 20.9126L15.6218 28.2333C15.7318 28.3183 15.8806 28.3333 16.0054 28.272C16.1302 28.2108 16.2093 28.0839 16.2093 27.9449V20.6242C16.2093 20.5108 16.1565 20.4038 16.0664 20.3348L6.58634 13.0751Z"
+                  fill="white"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M26.5468 13.1978C26.5468 13.0885 26.6316 13 26.7362 13H33.8105C33.8884 13 33.9584 13.0498 33.9869 13.1255C34.0154 13.2012 33.9965 13.2874 33.9394 13.3427L26.8652 20.199C26.81 20.2525 26.7296 20.2668 26.6605 20.2353C26.5914 20.2039 26.5468 20.1327 26.5468 20.054V13.1978ZM26.9257 13.3956V13.5933V19.6005L33.328 13.3956H27.1152H26.9257Z"
+                  fill="white"
+                />
+              </svg>
+              <div className="bot-dummy">
+                <div className="bot-dummy1">WhisBot</div>
+                <div className="bot-dummy2" id="bot-dummy2-0"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="content"
+          style={{ display: send === true ? "none" : "flex" }}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="111"
@@ -153,6 +441,30 @@ export default function Chat() {
                   </clipPath>
                 </defs>
               </svg>
+              <div
+                id="feature-1"
+                hidden={featurename === "communicate" ? false : true}
+              >
+                #com
+              </div>
+              <div
+                id="feature-2"
+                hidden={featurename === "voice_q&a" ? false : true}
+              >
+                #vqa
+              </div>
+              <div
+                id="feature-3"
+                hidden={featurename === "noise_removal" ? false : true}
+              >
+                #nr
+              </div>
+              <div
+                id="feature-4"
+                hidden={featurename === "text_to_music" ? false : true}
+              >
+                #ttm
+              </div>
             </div>
             <textarea
               placeholder="Enter a prompt here"
@@ -194,6 +506,7 @@ export default function Chat() {
             viewBox="0 0 21 21"
             fill="none"
             id="send-prompt"
+            onClick={sendPrompt}
           >
             <path
               d="M8.85714 11.7143L1 8.14286L19.5714 1L12.4286 19.5714L8.85714 11.7143Z"
@@ -215,19 +528,44 @@ export default function Chat() {
         </div>
         <div
           className="features-box"
+          id="features-box-id"
           hidden={featureButtonClicked === true ? false : true}
         >
-          <div id="communicate-with-bot">
-            <div className="p-container-1">Communicate</div>
+          <div
+            className="communicate-with-bot"
+            id="p1-container"
+            onClick={onClickChangeFeature}
+          >
+            <div className="communicate-with-bot" id="p-container-1">
+              Communicate
+            </div>
           </div>
-          <div id="voice-qa">
-            <div className="p-container-2">Voice Q&A</div>
+          <div
+            className="voice-qa"
+            id="p2-container"
+            onClick={onClickChangeFeature}
+          >
+            <div className="voice-qa" id="p-container-2">
+              Voice Q&A
+            </div>
           </div>
-          <div id="audio-noise-removal">
-            <div className="p-container-3">Audio Noise Removal</div>
+          <div
+            className="audio-noise-removal"
+            id="p3-container"
+            onClick={onClickChangeFeature}
+          >
+            <div className="audio-noise-removal" id="p-container-3">
+              Audio Noise Removal
+            </div>
           </div>
-          <div id="text-to-music">
-            <div className="p-container-4">Text to music</div>
+          <div
+            className="text-to-music"
+            id="p4-container"
+            onClick={onClickChangeFeature}
+          >
+            <div className="text-to-music" id="p-container-4">
+              Text to music
+            </div>
           </div>
         </div>
       </div>

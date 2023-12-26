@@ -5,6 +5,6 @@ import featuresReducer from "./features_state";
 export default configureStore({
   reducer: {
     showSidebar: sidebarReducer,
-    changeFeatures: featuresReducer,
+    featureName: featuresReducer,
   },
 });
