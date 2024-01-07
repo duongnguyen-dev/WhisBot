@@ -1,9 +1,8 @@
 import "../lib/fonts.css";
 import "../styles/chat.css";
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { changeFeatures } from "../states/features_state";
-// import WaveSurfer from "wavesurfer.js";
 import api from "../api";
 
 export default function Chat() {
@@ -13,6 +12,100 @@ export default function Chat() {
   const dispatch = useDispatch();
   const [send, setSend] = useState(false);
   const [bubble, setBubble] = useState("0");
+  const [permission, setPermission] = useState(false);
+  const [stream, setStream] = useState(null);
+  const mimeType = "audio/webm";
+  const mediaRecorder = useRef(null);
+  const [audioChunks, setAudioChunks] = useState([]);
+
+  const getMicrophonePermission = async () => {
+    if (permission === false) {
+      if ("MediaRecorder" in window) {
+        try {
+          const streamData = await navigator.mediaDevices.getUserMedia({
+            audio: true,
+          });
+          setPermission(true);
+          setStream(streamData);
+        } catch (err) {
+          alert(err.message);
+        }
+      } else {
+        alert("The MediaRecorder API is not supported in your browser.");
+      }
+    }
+  };
+
+  const startRecording = () => {
+    if (!stream) return;
+    const media = new MediaRecorder(stream, { mimeType: mimeType });
+    document.getElementById("textarea").value = "Bot is listening ...";
+    mediaRecorder.current = media;
+    mediaRecorder.current.start();
+    let localAudioChunks = [];
+    mediaRecorder.current.ondataavailable = (event) => {
+      if (typeof event.data === "undefined") return;
+      if (event.data.size === 0) return;
+      localAudioChunks.push(event.data);
+    };
+    setAudioChunks(localAudioChunks);
+  };
+
+  const endRecording = () => {
+    if (permission === false) return;
+    document.getElementById("textarea").value = "";
+    mediaRecorder.current.stop();
+    mediaRecorder.current.onstop = async () => {
+      if (send === false) {
+        setSend(true);
+      }
+
+      if (bubble === "0") {
+        var bot_dummy = document.getElementById("bot-dummy2-0");
+      } else {
+        var bot_dummy = document.getElementById(
+          "bot-dummy2-" + String(parseInt(bubble) - 1)
+        );
+      }
+
+      const audioBlob = new Blob(audioChunks, { type: mimeType });
+      const formdata = new FormData();
+      formdata.append("data", audioBlob);
+      var response = null;
+
+      const chat_screen = document.getElementById("chat-screen");
+      var loading_original = document.getElementById("loading");
+      var bot_original = document.getElementById("bot-bubble");
+
+      var loading_clone = loading_original.cloneNode(true);
+      loading_clone.id = "loading-" + bubble;
+      loading_clone.style.display = "flex";
+      chat_screen.appendChild(loading_clone);
+      chat_screen.scrollTop = chat_screen.scrollHeight;
+
+      if (featurename === "communicate") {
+        response = await api.post("/voice_chat", formdata);
+      } else if (featurename === "qa") {
+        response = await api.post("/voice_qa", formdata);
+      }
+
+      loading_clone.style.display = "none";
+      bot_dummy.innerHTML = response.data.answer;
+      bot_dummy.id = "bot-dummy2-" + bubble;
+      var bot_clone = bot_original.cloneNode(true);
+      bot_clone.id = "bot-bubble" + "-" + bubble;
+      bot_clone.style.display = "flex";
+      chat_screen.appendChild(bot_clone);
+      chat_screen.scrollTop = chat_screen.scrollHeight;
+
+      setBubble(String(parseInt(bubble) + 1));
+      var msg = new SpeechSynthesisUtterance(response.data.answer);
+      var voices = window.speechSynthesis.getVoices();
+      msg.voice = voices[0];
+      window.speechSynthesis.speak(msg);
+      setAudioChunks([]);
+    };
+  };
 
   const onClickFeatureButton = () => {
     if (featureButtonClicked === true && featurename === null) {
@@ -29,6 +122,12 @@ export default function Chat() {
         "#eee9ff";
       document.getElementById("selecting-features").hidden = "false";
     }
+  };
+
+  const autoIncreaseHeight = () => {
+    const textarea = document.querySelector("textarea");
+    textarea.style.height = "auto";
+    textarea.style.height = textarea.scrollHeight + "px";
   };
 
   const sendPrompt = async () => {
@@ -51,6 +150,7 @@ export default function Chat() {
     const chat_screen = document.getElementById("chat-screen");
     var user_original = document.getElementById("user-bubble");
     var bot_original = document.getElementById("bot-bubble");
+    var loading_original = document.getElementById("loading");
 
     var data = null;
     const textarea = document.querySelector("textarea");
@@ -58,7 +158,8 @@ export default function Chat() {
       data = { prompt: `♪ ${textarea.value} ♪` };
     } else if (featurename === "communicate") {
       data = { prompt: textarea.value };
-      console.log(data);
+    } else if (featurename === "voice_q&a") {
+      data = { prompt: textarea.value };
     }
     textarea.value = "";
 
@@ -69,22 +170,28 @@ export default function Chat() {
     user_clone.style.display = "flex";
     chat_screen.appendChild(user_clone);
 
-    const chat_window = document.getElementById("chat-screen");
-    chat_window.scrollTop = chat_window.scrollHeight;
+    var loading_clone = loading_original.cloneNode(true);
+    loading_clone.id = "loading-" + bubble;
+    loading_clone.style.display = "flex";
+    chat_screen.appendChild(loading_clone);
+    chat_screen.scrollTop = chat_screen.scrollHeight;
 
-    // var response = "undefine";
-    // if (featurename === "text_to_music") {
-    //   response = await api.post("/text_to_music", data);
-    // } else if (featurename === "communicate") {
-    const response = await api.post("/normal_chat", data);
+    var response = null;
+    if (featurename === "communicate") {
+      response = await api.post("/normal_chat", data);
+    } else if (featurename === "voice_q&a") {
+      response = await api.post("/qa", data);
+    }
 
-    bot_dummy.id = "bot-dummy2-" + bubble;
+    loading_clone.style.display = "none";
+
     bot_dummy.innerHTML = response.data.answer;
+    bot_dummy.id = "bot-dummy2-" + bubble;
     var bot_clone = bot_original.cloneNode(true);
     bot_clone.id = "bot-bubble" + "-" + bubble;
     bot_clone.style.display = "flex";
     chat_screen.appendChild(bot_clone);
-    chat_window.scrollTop = chat_window.scrollHeight;
+    chat_screen.scrollTop = chat_screen.scrollHeight;
 
     setBubble(String(parseInt(bubble) + 1));
   };
@@ -128,15 +235,15 @@ export default function Chat() {
   };
 
   return (
-    <div className="chat" id="chat">
-      <div
-        className="window"
-        id="window"
-        style={{
-          width: showSidebar === true ? "1435px" : "1680px",
-          marginLeft: showSidebar === true ? "265px" : "20px",
-        }}
-      >
+    <div
+      className="chat"
+      id="chat"
+      style={{
+        width: showSidebar === true ? "1435px" : "1720px",
+        left: showSidebar === true ? "325px" : "40px",
+      }}
+    >
+      <div className="window" id="window">
         <div
           className="chat-screen"
           id="chat-screen"
@@ -177,6 +284,38 @@ export default function Chat() {
               </div>
             </div>
           </div>
+          <div className="loading-0" id="loading" style={{ display: "none" }}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="6"
+              height="6"
+              viewBox="0 0 6 6"
+              fill="none"
+              className="loading-0-1"
+            >
+              <circle cx="3" cy="3" r="3" fill="#EEE9FF" />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="7"
+              height="6"
+              viewBox="0 0 7 6"
+              fill="none"
+              className="loading-0-2"
+            >
+              <circle cx="3.14355" cy="3" r="3" fill="#EEE9FF" />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="7"
+              height="6"
+              viewBox="0 0 7 6"
+              fill="none"
+              className="loading-0-3"
+            >
+              <circle cx="3.28711" cy="3" r="3" fill="#EEE9FF" />
+            </svg>
+          </div>
           <div
             className="bot-bubble"
             id="bot-bubble"
@@ -184,90 +323,6 @@ export default function Chat() {
               display: "none",
             }}
           >
-            {/* <div
-              className="bot-audio-content"
-              style={{
-                display: featurename === "text_to_music" ? "flex" : "none",
-              }}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="40"
-                height="40"
-                viewBox="0 0 40 40"
-                fill="none"
-              >
-                <circle cx="20" cy="20" r="20" fill="#A27CF2" />
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M16.9233 13.0751C16.8131 12.9908 16.6646 12.9762 16.5402 13.0377C16.4157 13.0991 16.337 13.2258 16.337 13.3645V20.6242C16.337 20.7371 16.3893 20.8436 16.4787 20.9126L25.9587 28.2333C26.0688 28.3183 26.2176 28.3333 26.3424 28.272C26.4672 28.2108 26.5462 28.0839 26.5462 27.9449V20.6242C26.5462 20.5108 26.4934 20.4038 26.4034 20.3348L16.9233 13.0751Z"
-                  fill="white"
-                />
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M6.58634 13.0751C6.47618 12.9908 6.32765 12.9762 6.20322 13.0377C6.07878 13.0991 6 13.2258 6 13.3645V20.6242C6 20.7371 6.05234 20.8436 6.14172 20.9126L15.6218 28.2333C15.7318 28.3183 15.8806 28.3333 16.0054 28.272C16.1302 28.2108 16.2093 28.0839 16.2093 27.9449V20.6242C16.2093 20.5108 16.1565 20.4038 16.0664 20.3348L6.58634 13.0751Z"
-                  fill="white"
-                />
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M26.5468 13.1978C26.5468 13.0885 26.6316 13 26.7362 13H33.8105C33.8884 13 33.9584 13.0498 33.9869 13.1255C34.0154 13.2012 33.9965 13.2874 33.9394 13.3427L26.8652 20.199C26.81 20.2525 26.7296 20.2668 26.6605 20.2353C26.5914 20.2039 26.5468 20.1327 26.5468 20.054V13.1978ZM26.9257 13.3956V13.5933V19.6005L33.328 13.3956H27.1152H26.9257Z"
-                  fill="white"
-                />
-              </svg>
-              <div className="bot-dummy">
-                <div className="bot-dummy1">WhisBot</div>
-                <div className="bot-dummy2" id="bot-dummy2-0">
-                  <div className="result">
-                    <p>Result</p>
-                  </div>
-                  <div className="play-button" id="play-button">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="30"
-                      height="30"
-                      viewBox="0 0 30 30"
-                      fill="none"
-                      id="play-button-element-1"
-                    >
-                      <circle
-                        cx="15"
-                        cy="15"
-                        r="14.5"
-                        stroke="#EEE9FF"
-                        stroke-opacity="0.4"
-                      />
-                    </svg>
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="14"
-                      height="14"
-                      viewBox="0 0 14 14"
-                      fill="none"
-                      id="play-button-element-2"
-                    >
-                      <g clip-path="url(#clip0_141_1231)">
-                        <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                          d="M2.67593 0.019043C2.38017 0.019043 2.08936 0.0944305 1.83094 0.237991C1.5678 0.37213 1.34569 0.574887 1.18817 0.824921C1.02838 1.07855 0.941166 1.37113 0.936001 1.67085L0.935926 1.67946V12.3395L0.936001 12.3481C0.941166 12.6478 1.02838 12.9404 1.18817 13.194C1.34569 13.4441 1.5678 13.6468 1.83094 13.781C2.08936 13.9245 2.38017 13.9999 2.67593 13.9999C2.97588 13.9999 3.27074 13.9224 3.53189 13.7748C3.53764 13.7716 3.54332 13.7682 3.54893 13.7647L12.1787 8.42723C12.4404 8.29534 12.6613 8.09441 12.8175 7.84593C12.9786 7.58934 13.0642 7.29248 13.0642 6.98946C13.0642 6.68645 12.9786 6.38958 12.8175 6.133C12.6612 5.88426 12.4399 5.68316 12.1779 5.55128L3.54751 0.253343C3.54236 0.250183 3.53715 0.247116 3.53189 0.244144C3.27074 0.0965852 2.97588 0.019043 2.67593 0.019043Z"
-                          fill="#EEE9FF"
-                          fill-opacity="0.4"
-                        />
-                      </g>
-                      <defs>
-                        <clipPath id="clip0_141_1231">
-                          <rect width="14" height="14" fill="white" />
-                        </clipPath>
-                      </defs>
-                    </svg>
-                  </div>
-                  <div id="demo-audio"></div>
-                </div>
-              </div>
-            </div> */}
             <div
               className="bot-content"
               style={{
@@ -418,7 +473,7 @@ export default function Chat() {
               stroke-linejoin="round"
             />
           </svg>
-          <div className="prompt-container">
+          <div className="prompt-container" id="prompt-container">
             <div id="selecting-features" onClick={onClickFeatureButton}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -471,6 +526,8 @@ export default function Chat() {
               rows="1"
               cols="100"
               id="textarea"
+              onInput={autoIncreaseHeight}
+              readOnly={featurename === null ? true : false}
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -478,6 +535,10 @@ export default function Chat() {
               height="20"
               viewBox="0 0 17 20"
               fill="none"
+              id="audio"
+              onClick={featurename === null ? null : getMicrophonePermission}
+              onMouseDown={featurename === null ? null : startRecording}
+              onMouseUp={featurename === null ? null : endRecording}
             >
               <path
                 d="M11.7143 8.57143C11.7143 9.51863 11.338 10.427 10.6682 11.0968C9.99845 11.7666 9.09004 12.1429 8.14284 12.1429C7.19564 12.1429 6.28723 11.7666 5.61745 11.0968C4.94768 10.427 4.57141 9.51863 4.57141 8.57143V3.57143C4.57141 2.62423 4.94768 1.71581 5.61745 1.04604C6.28723 0.376274 7.19564 0 8.14284 0C9.09004 0 9.99845 0.376274 10.6682 1.04604C11.338 1.71581 11.7143 2.62423 11.7143 3.57143V8.57143Z"

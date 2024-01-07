@@ -9,7 +9,6 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        {/* <AudioRecorder /> */}
         <Navbar></Navbar>
         <Sidebar></Sidebar>
         <Chat></Chat>

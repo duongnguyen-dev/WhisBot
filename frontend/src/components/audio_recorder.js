@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import "../styles/audio_recorder.css";
-import api from "../api";
+// import api from "../api";
 
 export default function AudioRecorder() {
   const [permission, setPermission] = useState(false);
@@ -29,18 +29,6 @@ export default function AudioRecorder() {
   };
 
   const startRecording = () => {
-    if (permission === false) return;
-    document.getElementById("outline-1").style.animation = "pulse 1s";
-    document.getElementById("outline-1").style.animationTimingFunction =
-      "ease-out";
-    document.getElementById("outline-1").style.animationIterationCount =
-      "infinite";
-    document.getElementById("outline-2").style.animation = "pulse 1s";
-    document.getElementById("outline-2").style.animationTimingFunction =
-      "ease-out";
-    document.getElementById("outline-2").style.animationIterationCount =
-      "infinite";
-
     if (!stream) return;
     const media = new MediaRecorder(stream, { mimeType: mimeType });
     mediaRecorder.current = media;
@@ -63,7 +51,6 @@ export default function AudioRecorder() {
       const audioBlob = new Blob(audioChunks, { type: mimeType });
       const formData = new FormData();
       formData.append("audio_file", audioBlob);
-      const response = await api.post("/generate_answer", formData);
       const audioURL = URL.createObjectURL(audioBlob);
       setAudio(audioURL);
       setAudioChunks([]);

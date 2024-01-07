@@ -1,10 +1,7 @@
 .chat {
   position: absolute;
-  /* display: flex; */
-  margin-top: 80px;
-  width: 1680px;
+  top: 80px;
   height: 876px;
-  margin-left: 60px;
 }
 
 .chat > .window {
@@ -12,8 +9,8 @@
   display: flex;
   border-radius: 30px;
   background: #1b1f27;
-  width: 100%;
   height: 100%;
+  width: 100%;
   justify-content: center;
 }
 
@@ -120,6 +117,51 @@
   line-height: normal;
 }
 
+.chat > .window > .chat-screen > .loading-0 {
+  margin-top: 40px;
+  width: 48.574px;
+  padding-top: 12.953px;
+  padding-bottom: 12.953px;
+  height: auto;
+  background: #7338f2;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+@keyframes loading {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.chat > .window > .chat-screen > .loading-0 > svg {
+  position: relative;
+  /* margin-top: 10px; */
+  animation: loading 1s ease-in alternate infinite;
+}
+
+.chat > .window > .chat-screen > .loading-0 > .loading-0-1 {
+  opacity: 0.2;
+  margin-left: 9px;
+  animation-delay: 0s;
+}
+.chat > .window > .chat-screen > .loading-0 > .loading-0-2 {
+  opacity: 0.2;
+  margin-left: 6.14px;
+  animation-delay: 0.5s;
+}
+
+.chat > .window > .chat-screen > .loading-0 > .loading-0-3 {
+  opacity: 0.2;
+  margin-left: 6.14px;
+  animation-delay: 1s;
+}
+
 .chat > .window > .content {
   flex-direction: column;
   margin-top: 50px;
@@ -175,9 +217,12 @@
   border-radius: 30px;
   background: #000;
   width: 683px;
-  height: 60px;
+  height: auto;
   margin-left: 32.43px;
   align-items: center;
+  padding: 10px;
+  margin-top: auto;
+  margin-bottom: 0;
 }
 
 .chat > .window > .prompt > .prompt-container > #selecting-features {
@@ -221,6 +266,8 @@
   line-height: normal;
   margin-left: 70px;
   width: 500px;
+  max-height: 95px;
+  overflow: auto;
 }
 
 .chat > .window > .prompt > .prompt-container > textarea::placeholder {
@@ -357,132 +404,4 @@
   transform: translate(0, -50%);
   margin-left: 20px;
   cursor: pointer;
-}
-
-.chat > .window > .chat-screen > .bot-bubble > .bot-audio-content > .bot-dummy {
-  margin-top: 11px;
-  display: flex;
-  flex-direction: column;
-  margin-left: 10px;
-  max-width: 629px;
-}
-
-.chat
-  > .window
-  > .chat-screen
-  > .bot-bubble
-  > .bot-audio-content
-  > .bot-dummy
-  > .bot-dummy1 {
-  margin-bottom: 10px;
-  color: #fff;
-  font-family: Bold;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-}
-
-.chat
-  > .window
-  > .chat-screen
-  > .bot-bubble
-  > .bot-audio-content
-  > .bot-dummy
-  > .bot-dummy2 {
-  display: flex;
-  height: 100px;
-  width: 641px;
-  background: black;
-  align-items: center;
-  border-radius: 5px;
-}
-
-.chat
-  > .window
-  > .chat-screen
-  > .bot-bubble
-  > .bot-audio-content
-  > .bot-dummy
-  > .bot-dummy2
-  > .result {
-  position: absolute;
-  border-radius: 1px;
-  background: #eee9ff;
-  width: 65px;
-  height: 44px;
-  color: #1b1f27;
-  font-family: SemiBold;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-  margin-left: 20px;
-}
-
-.chat
-  > .window
-  > .chat-screen
-  > .bot-bubble
-  > .bot-audio-content
-  > .bot-dummy
-  > .bot-dummy2
-  > .result
-  > p {
-  margin-top: 13px;
-  margin-left: 12px;
-}
-
-.chat
-  > .window
-  > .chat-screen
-  > .bot-bubble
-  > .bot-audio-content
-  > .bot-dummy
-  > .bot-dummy2
-  > .play-button {
-  display: flex;
-  margin-left: 100px;
-  align-items: center;
-  position: absolute;
-}
-
-.chat
-  > .window
-  > .chat-screen
-  > .bot-bubble
-  > .bot-audio-content
-  > .bot-dummy
-  > .bot-dummy2
-  > .play-button
-  > #play-button-element-1 {
-  position: absolute;
-}
-
-.chat
-  > .window
-  > .chat-screen
-  > .bot-bubble
-  > .bot-audio-content
-  > .bot-dummy
-  > .bot-dummy2
-  > .play-button
-  > #play-button-element-2 {
-  margin-left: 8px;
-}
-
-.chat
-  > .window
-  > .chat-screen
-  > .bot-bubble
-  > .bot-audio-content
-  > .bot-dummy
-  > .bot-dummy2
-  > #demo-audio {
-  border-radius: 1px;
-  background: #1b1f27;
-  width: 474px;
-  height: 44px;
-  margin-left: 145px;
-  max-width: 474px;
 }
