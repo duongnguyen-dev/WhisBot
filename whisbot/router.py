@@ -81,3 +81,9 @@ async def upload_file(filename: str, file: bytes = File(...)):
         temp_file.flush()
         db.append(temp_file.name)
     return {"answer" : "Success"}
+
+@app.post("/restart_db")
+async def restart_db():
+    if os.path.isdir(f"{os.path.dirname(os.path.realpath(current_dir))}/whisbot/whisbotdb") == True:
+        os.removedirs(f"{os.path.dirname(os.path.realpath(current_dir))}/whisbot/whisbotdb")
+    return {"response": "restart database successfully"}

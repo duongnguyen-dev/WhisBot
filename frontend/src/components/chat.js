@@ -154,9 +154,7 @@ export default function Chat() {
 
     var data = null;
     const textarea = document.querySelector("textarea");
-    if (featurename === "text_to_music") {
-      data = { prompt: `♪ ${textarea.value} ♪` };
-    } else if (featurename === "communicate") {
+    if (featurename === "communicate") {
       data = { prompt: textarea.value };
     } else if (featurename === "voice_q&a") {
       data = { prompt: textarea.value };
@@ -522,12 +520,23 @@ export default function Chat() {
               </div>
             </div>
             <textarea
-              placeholder="Enter a prompt here"
+              placeholder={
+                featurename === "text_to_music" ||
+                featurename === "noise_removal"
+                  ? "We do not support this feature currently."
+                  : "Enter a prompt here"
+              }
               rows="1"
               cols="100"
               id="textarea"
               onInput={autoIncreaseHeight}
-              readOnly={featurename === null ? true : false}
+              readOnly={
+                featurename === null ||
+                featurename === "text_to_music" ||
+                featurename === "noise_removal"
+                  ? true
+                  : false
+              }
             />
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -536,9 +545,27 @@ export default function Chat() {
               viewBox="0 0 17 20"
               fill="none"
               id="audio"
-              onClick={featurename === null ? null : getMicrophonePermission}
-              onMouseDown={featurename === null ? null : startRecording}
-              onMouseUp={featurename === null ? null : endRecording}
+              onClick={
+                featurename === null ||
+                featurename === "text_to_music" ||
+                featurename === "noise_removal"
+                  ? null
+                  : getMicrophonePermission
+              }
+              onMouseDown={
+                featurename === null ||
+                featurename === "text_to_music" ||
+                featurename === "noise_removal"
+                  ? null
+                  : startRecording
+              }
+              onMouseUp={
+                featurename === null ||
+                featurename === "text_to_music" ||
+                featurename === "noise_removal"
+                  ? null
+                  : endRecording
+              }
             >
               <path
                 d="M11.7143 8.57143C11.7143 9.51863 11.338 10.427 10.6682 11.0968C9.99845 11.7666 9.09004 12.1429 8.14284 12.1429C7.19564 12.1429 6.28723 11.7666 5.61745 11.0968C4.94768 10.427 4.57141 9.51863 4.57141 8.57143V3.57143C4.57141 2.62423 4.94768 1.71581 5.61745 1.04604C6.28723 0.376274 7.19564 0 8.14284 0C9.09004 0 9.99845 0.376274 10.6682 1.04604C11.338 1.71581 11.7143 2.62423 11.7143 3.57143V8.57143Z"
@@ -567,7 +594,13 @@ export default function Chat() {
             viewBox="0 0 21 21"
             fill="none"
             id="send-prompt"
-            onClick={sendPrompt}
+            onClick={
+              featurename === null ||
+              featurename === "text_to_music" ||
+              featurename === "noise_removal"
+                ? null
+                : sendPrompt
+            }
           >
             <path
               d="M8.85714 11.7143L1 8.14286L19.5714 1L12.4286 19.5714L8.85714 11.7143Z"

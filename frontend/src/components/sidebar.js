@@ -48,6 +48,42 @@ export default function Sidebar() {
       className="sidebar"
       style={{ display: showSidebar === true ? "flex" : "none" }}
     >
+      <div
+        id="new-chat"
+        onClick={async () => {
+          await api.post("/restart_db");
+          document.location.reload();
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="8"
+          height="8"
+          viewBox="0 0 8 8"
+          fill="none"
+        >
+          <g clip-path="url(#clip0_137_102)">
+            <path
+              d="M4 0.285645V7.71422"
+              stroke="white"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M0.285706 3.97705H7.71428"
+              stroke="white"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </g>
+          <defs>
+            <clipPath id="clip0_137_102">
+              <rect width="8" height="8" fill="white" />
+            </clipPath>
+          </defs>
+        </svg>
+        <p>New chat</p>
+      </div>
       <div className="document-uploader-text">Document Uploader</div>
       <div
         id="document-uploader"

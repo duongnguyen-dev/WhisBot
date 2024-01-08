@@ -7,7 +7,26 @@
   flex-direction: column;
 }
 
+.sidebar > #new-chat {
+  display: flex;
+  align-items: center;
+  width: 256px;
+  height: 30px;
+  background: #a27cf2;
+  border-radius: 5px;
+  color: white;
+  font-family: Regular;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
 .sidebar > .document-uploader-text {
+  margin-top: 17px;
   color: #fff;
   font-family: SemiBold;
   font-size: 16px;
@@ -137,7 +156,6 @@
   cursor: pointer;
 }
 
-/*
 .sidebar
   > #qa-documents-database
   > #documents-library
@@ -171,4 +189,4 @@
   > path {
   fill: #eb5757;
   cursor: pointer;
-} */
+}
