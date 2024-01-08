@@ -13,7 +13,7 @@ Strictly follow the below instructions to run the application
 
 1. Clone this Repo:
 ```
-git clone
+git clone https://github.com/DuongNg2911/WhisBot.git
 pip install -r requirements.txt
 ```
 2. Make sure you have installed a version of Python that supports arm64 architecture, otherwise:
