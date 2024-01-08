@@ -1,6 +1,8 @@
 # WhisBot
 Your own AI Voice Assistant
 
+![screenshot](https://github.com/DuongNg2911/WhisBot/assets/127082369/dde98ba9-b777-4c46-82da-85ecf838db99)
+
 - Run on CPU only
 - Voice chat with Bot
 - Voice Q&A with Bot
