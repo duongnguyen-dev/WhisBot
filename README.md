@@ -2,7 +2,8 @@
 <p align="center">
   <img src="https://github.com/DuongNg2911/WhisBot/assets/127082369/af66e2d1-b47c-4fdb-85d5-f73e2451b3c0"/>
 </p>
-Your own AI Voice Assistant
+
+<p align="center">Your own AI Voice Assistant</p>
 
 ![screenshot](https://github.com/DuongNg2911/WhisBot/assets/127082369/dde98ba9-b777-4c46-82da-85ecf838db99)
 
