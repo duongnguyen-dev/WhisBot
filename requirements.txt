@@ -1,0 +1,6 @@
+openai-whisper
+langchain
+fastapi
+uvicorn
+torch
+pydantic
