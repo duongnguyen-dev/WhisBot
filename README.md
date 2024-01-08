@@ -6,7 +6,7 @@ Your own AI Voice Assistant
 - Run on CPU only
 - Voice chat with Bot
 - Voice Q&A with Bot
-- Built with [LLama](), [Fast Whisper](), [Langchain](), [python-llama-cpp]()
+- Built with [LLama](https://github.com/facebookresearch/llama), [Fast Whisper](https://github.com/openai/whisper), [Langchain](https://github.com/langchain-ai/langchain), [python-llama-cpp](https://github.com/abetlen/llama-cpp-python)
 
 ## I. Installation and Usage (MacOS only)
 Strictly follow the below instructions to run the application
