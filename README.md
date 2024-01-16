@@ -18,7 +18,6 @@ Strictly follow the below instructions to run the application
 1. Clone this Repo:
 ```
 git clone https://github.com/DuongNg2911/WhisBot.git
-pip install -r requirements.txt
 ```
 2. Make sure you have installed a version of Python that supports arm64 architecture, otherwise:
 ```
@@ -30,20 +29,24 @@ bash Miniforge3-MacOSX-arm64.sh
 conda create -n myenv python==3.9
 conda activate myenv
 ```
-4. Install python-llama-cpp:
+4. Run
+```
+pip install -r requirements.txt
+```
+5. Install python-llama-cpp:
 ```
 !CMAKE_ARGS="-DCMAKE_OSX_ARCHITECTURES=arm64" pip install --upgrade --verbose --force-reinstall --no-cache-dir llama-cpp-python==0.2.11
 ```
-5. Download models:
+6. Download models:
 ```
 bash scripts/download_models.sh
 ```
-6. To run frontend:
+7. To run frontend:
 ```
 cd frontend
 npm start
 ```
-7. To run backend:
+8. To run backend:
 ```
 cd whisbot
 uvicorn router:app --reload
