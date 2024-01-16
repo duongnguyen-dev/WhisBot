@@ -1,6 +1,6 @@
 openai-whisper
-langchain
-fastapi
-uvicorn
-torch
-pydantic
+langchain==0.0.352
+fastapi==0.105.0
+uvicorn==0.25.0
+torch==2.1.2
+pydantic==2.5.3
