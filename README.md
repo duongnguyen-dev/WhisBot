@@ -12,7 +12,7 @@
 - Voice Q&A with Bot
 - Built with [LLama](https://github.com/facebookresearch/llama), [Fast Whisper](https://github.com/openai/whisper), [Langchain](https://github.com/langchain-ai/langchain), [python-llama-cpp](https://github.com/abetlen/llama-cpp-python)
 
-## I. Installation and Usage (MacOS only)
+## Installation and Usage (MacOS only)
 Strictly follow the below instructions to run the application
 
 1. Clone this Repo:
@@ -38,13 +38,12 @@ conda activate myenv
 ```
 bash scripts/download_models.sh
 ```
-## II. Development
-To run frontend:
+6. To run frontend:
 ```
 cd frontend
 npm start
 ```
-To run backend:
+7. To run backend:
 ```
 cd whisbot
 uvicorn router:app --reload
